@@ -32,6 +32,18 @@ class PDFUtils {
         secondPage = pdfDoc.addPage();
       }
       
+      // Check if page 3 exists, if not create it
+      let thirdPage;
+      if (pages.length >= 3) {
+        thirdPage = pages[2]; // Page 3 (index 2)
+      } else {
+        // Create pages until we have page 3
+        while (pdfDoc.getPageCount() < 3) {
+          pdfDoc.addPage();
+        }
+        thirdPage = pdfDoc.getPages()[2]; // Page 3
+      }
+      
       // Check if page 4 exists, if not create it
       let fourthPage;
       if (pages.length >= 4) {
@@ -109,25 +121,73 @@ class PDFUtils {
         console.log(`Address placed on PAGE 4 at: x=${perfectAddressPosition.x}, y=${perfectAddressPosition.y - 1.5}`);
       }
       
-      // Add Date - DISABLED
-      // if (formData.date) {
-      //   firstPage.drawText(formData.date, {
-      //     x: textPositions.date.x,
-      //     y: textPositions.date.y,
-      //     size: fontSize,
-      //     color: textColor,
-      //   });
-      // }
+              // Add Price From field on Page 3 - 200px up + 80px left
+        if (formData.priceFrom) {
+          const priceFromPosition = {
+            x: 80, // 150 - 80px left
+            y: 305, // 120 + 200px up
+          };
+        
+        thirdPage.drawText(formData.priceFrom, {
+          x: priceFromPosition.x,
+          y: priceFromPosition.y,
+          size: 12,
+          color: textColor,
+        });
+        
+        console.log(`Price From value "${formData.priceFrom}" placed on PAGE 3 at: x=${priceFromPosition.x}, y=${priceFromPosition.y}`);
+      }
       
-      // Add Price - DISABLED
-      // if (formData.price) {
-      //   firstPage.drawText(formData.price.toString(), {
-      //     x: textPositions.price.x,
-      //     y: textPositions.price.y,
-      //     size: fontSize,
-      //     color: textColor,
-      //   });
-      // }
+              // Add Price To field on Page 3 - same level as Price From
+        if (formData.priceTo) {
+          const priceToPosition = {
+            x: 200, // 150 + 800px right
+            y: 305, // Same Y as Price From
+          };
+        
+        thirdPage.drawText(formData.priceTo, {
+          x: priceToPosition.x,
+          y: priceToPosition.y,
+          size: 12,
+          color: textColor,
+        });
+        
+        console.log(`Price To value "${formData.priceTo}" placed on PAGE 3 at: x=${priceToPosition.x}, y=${priceToPosition.y}`);
+      }
+      
+      // Add Salesperson's Name on Page 3 (bottom)
+      if (formData.salespersonName) {
+        const salespersonPage3Position = {
+          x: 225, // Center position
+          y: 190, // Bottom of page 3
+        };
+        
+        thirdPage.drawText(formData.salespersonName, {
+          x: salespersonPage3Position.x,
+          y: salespersonPage3Position.y,
+          size: 12,
+          color: textColor,
+        });
+        
+        console.log(`Salesperson's Name value "${formData.salespersonName}" placed on PAGE 3 (bottom) at: x=${salespersonPage3Position.x}, y=${salespersonPage3Position.y}`);
+      }
+      
+      // Add Salesperson's Name on Page 4 (bottom)
+      if (formData.salespersonName) {
+        const salespersonPage4Position = {
+          x: 225, // Center position
+          y: 165, // Bottom of page 4
+        };
+        
+        fourthPage.drawText(formData.salespersonName, {
+          x: salespersonPage4Position.x,
+          y: salespersonPage4Position.y,
+          size: 12,
+          color: textColor,
+        });
+        
+        console.log(`Salesperson's Name value "${formData.salespersonName}" placed on PAGE 4 (bottom) at: x=${salespersonPage4Position.x}, y=${salespersonPage4Position.y}`);
+      }
       
       // Save the modified PDF with unique filename
       const timestamp = Date.now();
