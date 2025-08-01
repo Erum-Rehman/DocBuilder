@@ -56,6 +56,18 @@ class PDFUtils {
         fourthPage = pdfDoc.getPages()[3]; // Page 4
       }
       
+      // Check if page 5 exists, if not create it
+      let fifthPage;
+      if (pages.length >= 5) {
+        fifthPage = pages[4]; // Page 5 (index 4)
+      } else {
+        // Create pages until we have page 5
+        while (pdfDoc.getPageCount() < 5) {
+          pdfDoc.addPage();
+        }
+        fifthPage = pdfDoc.getPages()[4]; // Page 5
+      }
+      
       const { width, height } = secondPage.getSize();
       
       // Define text positions for Full Name field
@@ -187,6 +199,74 @@ class PDFUtils {
         });
         
         console.log(`Salesperson's Name value "${formData.salespersonName}" placed on PAGE 4 (bottom) at: x=${salespersonPage4Position.x}, y=${salespersonPage4Position.y}`);
+      }
+      
+      // Add Date on Page 3
+      if (formData.date) {
+        const datePage3Position = {
+          x: 400, // Right side of page
+          y: 155, // Middle area
+        };
+        
+        thirdPage.drawText(formData.date, {
+          x: datePage3Position.x,
+          y: datePage3Position.y,
+          size: 12,
+          color: textColor,
+        });
+        
+        console.log(`Date value "${formData.date}" placed on PAGE 3 at: x=${datePage3Position.x}, y=${datePage3Position.y}`);
+      }
+      
+      // Add Date on Page 4
+      if (formData.date) {
+        const datePage4Position = {
+          x: 410, // Right side of page
+          y: 128, // Middle area
+        };
+        
+        fourthPage.drawText(formData.date, {
+          x: datePage4Position.x,
+          y: datePage4Position.y,
+          size: 12,
+          color: textColor,
+        });
+        
+        console.log(`Date value "${formData.date}" placed on PAGE 4 at: x=${datePage4Position.x}, y=${datePage4Position.y}`);
+      }
+      
+      // Add Date on Page 5
+      if (formData.date) {
+        const datePage5Position = {
+          x: 120, // Right side of page
+          y: 280, // Middle area
+        };
+        
+        fifthPage.drawText(formData.date, {
+          x: datePage5Position.x,
+          y: datePage5Position.y,
+          size: 12,
+          color: textColor,
+        });
+        
+        console.log(`Date value "${formData.date}" placed on PAGE 5 at: x=${datePage5Position.x}, y=${datePage5Position.y}`);
+      }
+      
+      // Add Full Name on Page 5 (center)
+      if (formData.fullName) {
+        const fullNamePage5Position = {
+          x: 150, // Center position
+          y: 350, // Center area of page
+        };
+        
+        fifthPage.drawText(formData.fullName, {
+          x: fullNamePage5Position.x,
+          y: fullNamePage5Position.y,
+          size: 12,
+          color: textColor,
+        });
+        
+        console.log(`Full Name value "${formData.fullName}" placed on PAGE 5 (center) at: x=${fullNamePage5Position.x}, y=${fullNamePage5Position.y}`);
       }
       
       // Save the modified PDF with unique filename

@@ -8,7 +8,7 @@ const pdfUtils = new PDFUtils();
 // Generate document endpoint
 router.post('/generate-document', async (req, res) => {
   try {
-    const { address, priceFrom, priceTo, salespersonName, templateName = 'compliance.pdf' } = req.body;
+    const { address, priceFrom, priceTo, salespersonName, date, fullName, templateName = 'compliance.pdf' } = req.body;
     
     // Log received data for testing
     console.log('Received document generation request:', {
@@ -16,6 +16,8 @@ router.post('/generate-document', async (req, res) => {
       priceFrom,
       priceTo,
       salespersonName,
+      date,
+      fullName,
       templateName
     });
     
@@ -45,7 +47,7 @@ router.post('/generate-document', async (req, res) => {
     }
     
     // Fill the PDF template with form data
-    const formData = { address, priceFrom, priceTo, salespersonName };
+    const formData = { address, priceFrom, priceTo, salespersonName, date, fullName };
     const result = await pdfUtils.fillPDFTemplate(templateName, formData);
     
     res.status(200).json({
@@ -58,7 +60,9 @@ router.post('/generate-document', async (req, res) => {
           address: address,
           priceFrom: priceFrom,
           priceTo: priceTo,
-          salespersonName: salespersonName
+          salespersonName: salespersonName,
+          date: date,
+          fullName: fullName
         },
         documentFile: {
           filename: result.filename,
