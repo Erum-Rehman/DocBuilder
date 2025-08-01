@@ -3,7 +3,7 @@ export const API_BASE_URL = 'https://docbuilder-makg.onrender.com/api';
 
 // Default form data for testing
 export const DEFAULT_TEST_DATA = {
-  "address": "House # 123, Street 15, F-8/2, Islamabad, Pakistan",
+  "address": "House # 123, Street 15, F-8/2, Islamabad",
   "priceFrom": "5000",
   "priceTo": "10000",
   "salespersonName": "Ahmed Hassan",
