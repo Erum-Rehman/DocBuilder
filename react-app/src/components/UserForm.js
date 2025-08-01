@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import documentService from '../services/documentService';
+import DownloadModal from './modals/DownloadModal';
+import TestDataButton from './TestDataButton';
 
 const UserForm = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +14,10 @@ const UserForm = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState('');
+  const [apiResponse, setApiResponse] = useState(null);
+  const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,41 +30,71 @@ const UserForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
     setDownloadUrl('');
     
     try {
-      const response = await fetch('http://localhost:5000/api/generate-document', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Document generated:', result);
+      const result = await documentService.generateDocument(formData);
+      
+      if (result.success) {
+        console.log('Document generated:', result.data);
+        setApiResponse(result.data);
         
-        // Set download URL
-        if (result.data && result.data.documentFile && result.data.documentFile.downloadUrl) {
-          setDownloadUrl(`http://localhost:5000${result.data.documentFile.downloadUrl}`);
+        // Set download URL and show modal
+        if (result.data?.data?.documentFile?.downloadUrl) {
+          const fullDownloadUrl = `http://localhost:5000${result.data.data.documentFile.downloadUrl}`;
+          console.log('Full download URL:', fullDownloadUrl);
+          console.log('Document filename:', result.data.data.documentFile.filename);
+          setDownloadUrl(fullDownloadUrl);
+          setShowModal(true);
+        } else {
+          console.error('No download URL found in response:', result.data);
         }
       } else {
-        console.error('Failed to generate document');
-        alert('Failed to generate document. Please try again.');
+        setError(result.error || 'Failed to generate document');
+        console.error('Failed to generate document:', result.error);
       }
     } catch (error) {
+      setError('An unexpected error occurred');
       console.error('Error:', error);
-      alert('Error generating document. Please try again.');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleDownload = async () => {
+    if (downloadUrl && apiResponse?.data?.documentFile?.filename) {
+      const result = await documentService.downloadDocument(downloadUrl, apiResponse.data.documentFile.filename);
+      if (!result.success) {
+        setError(result.error);
+      }
+    } else {
+      // Fallback: just trigger download with generic filename
+      if (downloadUrl) {
+        const result = await documentService.downloadDocument(downloadUrl, 'document.pdf');
+        if (!result.success) {
+          setError(result.error);
+        }
+      }
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleFillTestData = (testData) => {
+    setFormData(testData);
+    setError('');
   };
 
   return (
     <div className="user-form-container">
       <div className="user-form-wrapper">
         <h2 className="user-form-title">Document Generator Form</h2>
+        <div className="test-data-section">
+          <TestDataButton onFillForm={handleFillTestData} />
+        </div>
         <form className="user-form" onSubmit={handleSubmit}>
           <div className="user-form-group">
             <label htmlFor="fullName" className="user-form-label">
@@ -184,20 +220,19 @@ const UserForm = () => {
           </button>
         </form>
 
-        {downloadUrl && (
-          <div className="download-section">
-            <h3>PDF Generated Successfully!</h3>
-            <a 
-              href={downloadUrl} 
-              download 
-              className="download-button"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Download PDF
-            </a>
+        {error && (
+          <div className="error-section">
+            <p className="error-message">❌ {error}</p>
           </div>
         )}
+
+        <DownloadModal
+          isOpen={showModal}
+          onClose={handleCloseModal}
+          downloadUrl={downloadUrl}
+          documentData={formData}
+          onDownload={handleDownload}
+        />
       </div>
     </div>
   );

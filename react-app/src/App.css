@@ -244,3 +244,44 @@ select.user-form-input {
     gap: 10px;
   }
 }
+
+/* Error Section */
+.error-section {
+  margin-top: 20px;
+  padding: 15px;
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.error-message {
+  margin: 0;
+  color: #c33;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Test Data Button */
+.test-data-section {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.test-data-button {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.test-data-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}

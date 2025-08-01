@@ -40,5 +40,5 @@ app.use('*', (req, res) => {
 // Start server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
-  console.log(`Health check: http://localhost:${port}/api/health`);
+  console.log(`Generate document: http://localhost:${port}/api/generate-document`);
 }); 

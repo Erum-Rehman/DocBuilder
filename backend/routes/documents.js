@@ -81,21 +81,4 @@ router.post('/generate-document', async (req, res) => {
   }
 });
 
-// Get available templates endpoint
-router.get('/templates', async (req, res) => {
-  try {
-    const templates = await pdfUtils.listTemplates();
-    res.status(200).json({
-      success: true,
-      templates: templates
-    });
-  } catch (error) {
-    console.error('Error listing templates:', error);
-    res.status(500).json({
-      error: 'Internal server error',
-      message: 'Failed to list templates'
-    });
-  }
-});
-
 module.exports = router; 

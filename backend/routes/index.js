@@ -2,11 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 // Import route modules
-const healthRoutes = require('./health');
 const documentsRoutes = require('./documents');
 
-// Use route modules
-router.use('/health', healthRoutes);
+// Use route modules - only generate-document endpoint
 router.use('/', documentsRoutes);
 
 module.exports = router; 
