@@ -1,14 +1,14 @@
 // API Configuration
-export const API_BASE_URL = 'http://localhost:5000/api';
+export const API_BASE_URL = 'https://docbuilder-makg.onrender.com/api';
 
 // Default form data for testing
 export const DEFAULT_TEST_DATA = {
-  "address": "123 Main Street, City, State",
+  "address": "House # 123, Street 15, F-8/2, Islamabad, Pakistan",
   "priceFrom": "5000",
   "priceTo": "10000",
-  "salespersonName": "John Smith",
+  "salespersonName": "Ahmed Hassan",
   "date": "2024-01-15",
-  "fullName": "John Doe"
+  "fullName": "Muhammad Ali Khan"
 };
 
 // Price options for dropdowns

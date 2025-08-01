@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://docbuilder-makg.onrender.com/api';
 
 class DocumentService {
   async generateDocument(documentData) {
@@ -48,8 +48,8 @@ class DocumentService {
       console.log('Filename:', filename);
 
       // Option 1: Try direct download with window.open (for same-origin URLs)
-      if (downloadUrl.startsWith('http://localhost:5000')) {
-        // For development, try direct download
+      if (downloadUrl.startsWith('https://docbuilder-makg.onrender.com')) {
+        // For production, try direct download
         const link = document.createElement('a');
         link.href = downloadUrl;
         link.setAttribute('download', filename);
